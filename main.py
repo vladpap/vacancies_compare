@@ -69,17 +69,17 @@ def get_average_salary_vacancy_table(salary_vacancies, title=""):
                          "Вакансий обработано",
                          "Средняя зарплата"
                          ])
-    for language, item in salary_vacancies.items():
-        output_table.append([language,
-                            item["vacancies_found"],
-                            item["vacancies_processed"],
-                            item["average_salary"]])
+    for programming_language, calculation_salary_vacancies in salary_vacancies.items():
+        output_table.append([programming_language,
+                            calculation_salary_vacancies["vacancies_found"],
+                            calculation_salary_vacancies["vacancies_processed"],
+                            calculation_salary_vacancies["average_salary"]])
 
     return AsciiTable(output_table, title).table
 
 
 def main():
-    developer_languages = ["java"]#, "python", "js", "ruby", "php", "c++", "c#"]
+    developer_languages = ["java", "python", "js", "ruby", "php", "c++", "c#"]
 
     vacancy_sj_language_counts = {}
     vacancy_hh_language_counts = {}
