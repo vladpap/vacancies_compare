@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
 
-def get_page_json_vacancy(api_url, headers="", params=""):
+def get_page_json_vacancies(api_url, headers="", params=""):
     response = requests.get(api_url, headers=headers, params=params)
     response.raise_for_status()
     return response.json()
 
 
-def get_page_hh_json_vacancy(page, vacancy_text):
+def get_page_hh_json_vacancies(page, vacancy_text):
     moscow_code = 1
     max_vacancy_counts = 100
     params = {
@@ -20,10 +20,10 @@ def get_page_hh_json_vacancy(page, vacancy_text):
             "per_page": max_vacancy_counts
         }
     api_hh_url = "https://api.hh.ru/vacancies"
-    return get_page_json_vacancy(api_hh_url, params=params)
+    return get_page_json_vacancies(api_hh_url, params=params)
 
 
-def get_page_sj_json_vacancy(page, vacancy_text):
+def get_page_sj_json_vacancies(page, vacancy_text):
     load_dotenv()
     superjob_key = os.getenv("SUPERJOB_SEKRET_KEY")
     sj_headers = {"X-Api-App-Id": superjob_key}
@@ -34,7 +34,7 @@ def get_page_sj_json_vacancy(page, vacancy_text):
                     "page": page
                 }
     api_sj_url = "https://api.superjob.ru/2.0/vacancies/"
-    return get_page_json_vacancy(api_sj_url, headers=sj_headers, params=params)
+    return get_page_json_vacancies(api_sj_url, headers=sj_headers, params=params)
 
 
 def predict_salary(salary_from, salary_to):
@@ -61,14 +61,14 @@ def predict_rub_salary_sj(vacancy):
     return predict_salary(vacancy["payment_from"], vacancy["payment_to"])
 
 
-def get_average_salary_vacancy_table(salary_vacancys, title=""):
+def get_average_salary_vacancy_table(salary_vacancies, title=""):
     output_table = []
     output_table.append(["Язык программирования",
                          "Вакансий найдено",
                          "Вакансий обработано",
                          "Средняя зарплата"
                          ])
-    for language, item in salary_vacancys.items():
+    for language, item in salary_vacancies.items():
         output_table.append([language,
                             item["vacancies_found"],
                             item["vacancies_processed"],
@@ -78,7 +78,7 @@ def get_average_salary_vacancy_table(salary_vacancys, title=""):
 
 
 def main():
-    developer_languages = ["js", "java", "python", "ruby", "php", "c++", "c#"]
+    developer_languages = ["js"]#, "java", "python", "ruby", "php", "c++", "c#"]
 
     vacancy_sj_language_counts = {}
     vacancy_hh_language_counts = {}
@@ -94,7 +94,7 @@ def main():
         vacancy_more = True
 
         while vacancy_more:
-            vacancies = get_page_sj_json_vacancy(sj_page, developer_language)
+            vacancies = get_page_sj_json_vacancies(sj_page, developer_language)
 
             for vacancy in vacancies["objects"]:
                 predict_vacancy_rub_salary_sj = predict_rub_salary_sj(vacancy)
@@ -117,7 +117,7 @@ def main():
         # HH get vacancy
 
         while True:
-            json_hh_response = get_page_hh_json_vacancy(hh_page, developer_language)
+            json_hh_response = get_page_hh_json_vacancies(hh_page, developer_language)
 
             vacancy_found = json_hh_response["found"]
             vacancy_pages = json_hh_response["pages"]
