@@ -97,9 +97,9 @@ def main():
             vacancies = get_page_sj_json_vacancies(sj_page, developer_language)
 
             for vacancy in vacancies["objects"]:
-                predict_vacancy_rub_salary_sj = predict_rub_salary_sj(vacancy)
-                if predict_vacancy_rub_salary_sj:
-                    vacancy_sj_predicts.append(predict_vacancy_rub_salary_sj)
+                vacancy_predict_rub_salary_sj = predict_rub_salary_sj(vacancy)
+                if vacancy_predict_rub_salary_sj:
+                    vacancy_sj_predicts.append(vacancy_predict_rub_salary_sj)
 
             if len(vacancy_sj_predicts) == 0:
                 average_salary = 0
