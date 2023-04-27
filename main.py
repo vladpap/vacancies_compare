@@ -78,7 +78,7 @@ def get_average_salary_vacancy_table(salary_vacancies, title=""):
 
 
 def main():
-    developer_languages = ["python"]#, "java", "js", "ruby", "php", "c++", "c#"]
+    developer_languages = ["java"]#, "python", "js", "ruby", "php", "c++", "c#"]
 
     vacancy_sj_language_counts = {}
     vacancy_hh_language_counts = {}
@@ -101,7 +101,7 @@ def main():
                 if vacancy_predict_rub_salary_sj:
                     salary_predict_sj_vacancies.append(vacancy_predict_rub_salary_sj)
 
-            if len(salary_predict_sj_vacancies) == 0:
+            if not salary_predict_sj_vacancies:
                 average_salary = 0
             else:
                 average_salary = int(sum(salary_predict_sj_vacancies) / len(salary_predict_sj_vacancies))
@@ -129,7 +129,7 @@ def main():
             if hh_page > vacancy_pages:
                 break
 
-        if len(salary_predict_hh_vacancies) == 0:
+        if not salary_predict_hh_vacancies:
             average_salary = 0
         else:
             average_salary = int(sum(salary_predict_hh_vacancies) / len(salary_predict_hh_vacancies))
