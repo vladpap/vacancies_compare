@@ -117,12 +117,12 @@ def main():
         # HH get vacancy
 
         while True:
-            json_hh_response = get_page_hh_json_vacancies(hh_page, developer_language)
+            vacancies = get_page_hh_json_vacancies(hh_page, developer_language)
 
-            vacancy_found = json_hh_response["found"]
-            vacancy_pages = json_hh_response["pages"]
+            vacancy_found = vacancies["found"]
+            vacancy_pages = vacancies["pages"]
 
-            for vacancy in json_hh_response["items"]:
+            for vacancy in vacancies["items"]:
                 if (vacancy["salary"]) and (vacancy["salary"]["currency"] == "RUR"):
                     salary_predict_hh_vacancies.append(predict_rub_salary_hh(vacancy))
             hh_page += 1
