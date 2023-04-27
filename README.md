@@ -13,6 +13,7 @@
 ```console
 $ pip install -r requirements.txt
 ```
+* в переменную окружения `SUPERJOB_SEKRET_KEY` записать API ключ SUPERJOB
 
 ## Запуск
 
