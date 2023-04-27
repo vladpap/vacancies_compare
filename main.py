@@ -11,20 +11,26 @@ def get_page_json_vacancy(api_url, headers="", params=""):
 
 
 def get_page_hh_json_vacancy(page, vacancy_text):
+    moscow_code = 1
+    max_vacancy_counts = 100
     params = {
             "text": f"NAME:{vacancy_text}",
-            "area": 1,
+            "area": moscow_code,
             "page": page,
-            "per_page": 100
+            "per_page": max_vacancy_counts
         }
     api_hh_url = "https://api.hh.ru/vacancies"
     return get_page_json_vacancy(api_hh_url, params=params)
 
 
 def get_page_sj_json_vacancy(page, vacancy_text):
+    load_dotenv()
+    superjob_key = os.getenv("SUPERJOB_SEKRET_KEY")
+    sj_headers = {"X-Api-App-Id": superjob_key}
+    moscow_code = 4
     params = {
                     "keyword": vacancy_text,
-                    "town": 4,
+                    "town": moscow_code,
                     "page": page
                 }
     api_sj_url = "https://api.superjob.ru/2.0/vacancies/"
@@ -72,6 +78,8 @@ def get_average_salary_vacancy_table(salary_vacancys, title=""):
 
 
 def main():
+    developer_languages = ["js", "java", "python", "ruby", "php", "c++", "c#"]
+
     vacancy_sj_language_counts = {}
     vacancy_hh_language_counts = {}
 
@@ -80,15 +88,15 @@ def main():
         hh_page = 0
         vacancy_sj_predicts = []
         vacancy_hh_predicts = []
-        
+
         # SJ get vacancy
 
         vacancy_more = True
 
         while vacancy_more:
-            vacancys = get_page_sj_json_vacancy(sj_page, developer_language)
+            vacancies = get_page_sj_json_vacancy(sj_page, developer_language)
 
-            for vacancy in vacancys["objects"]:
+            for vacancy in vacancies["objects"]:
                 predict_vacancy_rub_salary_sj = predict_rub_salary_sj(vacancy)
                 if predict_vacancy_rub_salary_sj:
                     vacancy_sj_predicts.append(predict_vacancy_rub_salary_sj)
@@ -99,11 +107,11 @@ def main():
                 average_salary = int(sum(vacancy_sj_predicts) / len(vacancy_sj_predicts))
 
             vacancy_sj_language_counts[developer_language] = {
-                "vacancies_found": vacancys["total"],
+                "vacancies_found": vacancies["total"],
                 "vacancies_processed": len(vacancy_sj_predicts),
                 "average_salary": average_salary
             }
-            vacancy_more = vacancys["more"]
+            vacancy_more = vacancies["more"]
             sj_page += 1
 
         # HH get vacancy
@@ -140,9 +148,4 @@ def main():
 
 
 if __name__ == "__main__":
-    load_dotenv()
-    superjob_key = os.getenv("SUPERJOB_SEKRET_KEY")
-    sj_headers = {"X-Api-App-Id": superjob_key}
-
-    developer_languages = ["js", "java", "python", "ruby", "php", "c++", "c#"]
     main()
