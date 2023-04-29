@@ -106,13 +106,14 @@ def main():
             else:
                 average_salary = int(sum(salary_sj_vacancies) / len(salary_sj_vacancies))
 
-            vacancy_sj_language_counts[developer_language] = {
-                "vacancies_found": vacancies["total"],
-                "vacancies_processed": len(salary_sj_vacancies),
-                "average_salary": average_salary
-            }
             vacancy_more = vacancies["more"]
             sj_page += 1
+
+        vacancy_sj_language_counts[developer_language] = {
+            "vacancies_found": vacancies["total"],
+            "vacancies_processed": len(salary_sj_vacancies),
+            "average_salary": average_salary
+        }
 
         # HH get vacancy
 
