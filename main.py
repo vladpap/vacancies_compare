@@ -4,13 +4,13 @@ from dotenv import load_dotenv
 from terminaltables import AsciiTable
 
 
-def get_page_json_vacancies(api_url, headers="", params=""):
+def get_page_vacancies(api_url, headers="", params=""):
     response = requests.get(api_url, headers=headers, params=params)
     response.raise_for_status()
     return response.json()
 
 
-def get_page_hh_json_vacancies(page, vacancy_text):
+def get_page_hh_vacancies(page, vacancy_text):
     moscow_code = 1
     max_vacancy_counts = 100
     params = {
@@ -20,10 +20,10 @@ def get_page_hh_json_vacancies(page, vacancy_text):
             "per_page": max_vacancy_counts
         }
     api_hh_url = "https://api.hh.ru/vacancies"
-    return get_page_json_vacancies(api_hh_url, params=params)
+    return get_page_vacancies(api_hh_url, params=params)
 
 
-def get_page_sj_json_vacancies(page, vacancy_text, superjob_key):
+def get_page_sj_vacancies(page, vacancy_text, superjob_key):
     sj_headers = {"X-Api-App-Id": superjob_key}
     moscow_code = 4
     params = {
@@ -32,7 +32,7 @@ def get_page_sj_json_vacancies(page, vacancy_text, superjob_key):
                     "page": page
                 }
     api_sj_url = "https://api.superjob.ru/2.0/vacancies/"
-    return get_page_json_vacancies(api_sj_url, headers=sj_headers, params=params)
+    return get_page_vacancies(api_sj_url, headers=sj_headers, params=params)
 
 
 def predict_salary(salary_from, salary_to):
@@ -95,7 +95,7 @@ def main():
         vacancy_more = True
 
         while vacancy_more:
-            vacancies = get_page_sj_json_vacancies(sj_page, developer_language, superjob_key)
+            vacancies = get_page_sj_vacancies(sj_page, developer_language, superjob_key)
 
             for vacancy in vacancies["objects"]:
                 vacancy_rub_salary_sj = predict_rub_salary_sj(vacancy)
@@ -118,7 +118,7 @@ def main():
         # HH get vacancy
 
         while True:
-            vacancies = get_page_hh_json_vacancies(hh_page, developer_language)
+            vacancies = get_page_hh_vacancies(hh_page, developer_language)
 
             vacancy_found = vacancies["found"]
             vacancy_pages = vacancies["pages"]
