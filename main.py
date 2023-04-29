@@ -23,8 +23,7 @@ def get_page_hh_json_vacancies(page, vacancy_text):
     return get_page_json_vacancies(api_hh_url, params=params)
 
 
-def get_page_sj_json_vacancies(page, vacancy_text):
-    superjob_key = os.getenv("SUPERJOB_SEKRET_KEY")
+def get_page_sj_json_vacancies(page, vacancy_text, superjob_key):
     sj_headers = {"X-Api-App-Id": superjob_key}
     moscow_code = 4
     params = {
@@ -79,6 +78,7 @@ def get_average_salary_vacancy_table(salary_vacancies, title=""):
 
 def main():
     load_dotenv()
+    superjob_key = os.getenv("SUPERJOB_SEKRET_KEY")
     developer_languages = ["java", "python", "js", "ruby", "php", "c++", "c#"]
 
     vacancy_sj_language_counts = {}
@@ -95,7 +95,7 @@ def main():
         vacancy_more = True
 
         while vacancy_more:
-            vacancies = get_page_sj_json_vacancies(sj_page, developer_language)
+            vacancies = get_page_sj_json_vacancies(sj_page, developer_language, superjob_key)
 
             for vacancy in vacancies["objects"]:
                 vacancy_rub_salary_sj = predict_rub_salary_sj(vacancy)
