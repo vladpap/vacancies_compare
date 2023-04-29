@@ -24,7 +24,6 @@ def get_page_hh_json_vacancies(page, vacancy_text):
 
 
 def get_page_sj_json_vacancies(page, vacancy_text):
-    load_dotenv()
     superjob_key = os.getenv("SUPERJOB_SEKRET_KEY")
     sj_headers = {"X-Api-App-Id": superjob_key}
     moscow_code = 4
@@ -79,6 +78,7 @@ def get_average_salary_vacancy_table(salary_vacancies, title=""):
 
 
 def main():
+    load_dotenv()
     developer_languages = ["java", "python", "js", "ruby", "php", "c++", "c#"]
 
     vacancy_sj_language_counts = {}
