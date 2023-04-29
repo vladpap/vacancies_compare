@@ -87,8 +87,8 @@ def main():
     for developer_language in developer_languages:
         sj_page = 0
         hh_page = 0
-        salary_predict_sj_vacancies = []
-        salary_predict_hh_vacancies = []
+        salary_sj_vacancies = []
+        salary_hh_vacancies = []
 
         # SJ get vacancy
 
@@ -98,18 +98,18 @@ def main():
             vacancies = get_page_sj_json_vacancies(sj_page, developer_language)
 
             for vacancy in vacancies["objects"]:
-                vacancy_predict_rub_salary_sj = predict_rub_salary_sj(vacancy)
-                if vacancy_predict_rub_salary_sj:
-                    salary_predict_sj_vacancies.append(vacancy_predict_rub_salary_sj)
+                vacancy_rub_salary_sj = predict_rub_salary_sj(vacancy)
+                if vacancy_rub_salary_sj:
+                    salary_sj_vacancies.append(vacancy_rub_salary_sj)
 
-            if not salary_predict_sj_vacancies:
+            if not salary_sj_vacancies:
                 average_salary = 0
             else:
-                average_salary = int(sum(salary_predict_sj_vacancies) / len(salary_predict_sj_vacancies))
+                average_salary = int(sum(salary_sj_vacancies) / len(salary_sj_vacancies))
 
             vacancy_sj_language_counts[developer_language] = {
                 "vacancies_found": vacancies["total"],
-                "vacancies_processed": len(salary_predict_sj_vacancies),
+                "vacancies_processed": len(salary_sj_vacancies),
                 "average_salary": average_salary
             }
             vacancy_more = vacancies["more"]
@@ -125,19 +125,19 @@ def main():
 
             for vacancy in vacancies["items"]:
                 if (vacancy["salary"]) and (vacancy["salary"]["currency"] == "RUR"):
-                    salary_predict_hh_vacancies.append(predict_rub_salary_hh(vacancy))
+                    salary_hh_vacancies.append(predict_rub_salary_hh(vacancy))
             hh_page += 1
             if hh_page > vacancy_pages:
                 break
 
-        if not salary_predict_hh_vacancies:
+        if not salary_hh_vacancies:
             average_salary = 0
         else:
-            average_salary = int(sum(salary_predict_hh_vacancies) / len(salary_predict_hh_vacancies))
+            average_salary = int(sum(salary_hh_vacancies) / len(salary_hh_vacancies))
 
         vacancy_hh_language_counts[developer_language] = {
             "vacancies_found": vacancy_found,
-            "vacancies_processed": len(salary_predict_hh_vacancies),
+            "vacancies_processed": len(salary_hh_vacancies),
             "average_salary": average_salary
         }
 
