@@ -41,12 +41,11 @@ def predict_salary(salary_from, salary_to):
         return None
 
     if salary_from and (not salary_to):
-        return int(int(salary_from) * 1.2)
+        return int(salary_from * 1.2)
 
     if (not salary_from) and salary_to:
-        return int(int(salary_to) * 0.8)
-
-    return int((int(salary_from) + int(salary_to)) / 2)
+        return int(salary_to * 0.8)
+    return int((salary_from + salary_to) / 2)
 
 
 def predict_rub_salary_hh(vacancy):
