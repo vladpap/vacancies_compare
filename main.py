@@ -95,7 +95,7 @@ def main():
 
         while vacancy_more:
             vacancies = get_page_sj_vacancies(sj_page, developer_language, superjob_key)
-
+            vacancies_found_sj = vacancies["total"]
             for vacancy in vacancies["objects"]:
                 vacancy_rub_salary_sj = predict_rub_salary_sj(vacancy)
                 if vacancy_rub_salary_sj:
@@ -108,12 +108,6 @@ def main():
 
             vacancy_more = vacancies["more"]
             sj_page += 1
-
-        vacancy_sj_language_counts[developer_language] = {
-            "vacancies_found": vacancies["total"],
-            "vacancies_processed": len(salary_sj_vacancies),
-            "average_salary": average_salary
-        }
 
         # HH get vacancy
 
@@ -135,7 +129,13 @@ def main():
         else:
             average_salary = int(sum(salary_hh_vacancies) / len(salary_hh_vacancies))
 
-        vacancy_hh_language_counts[developer_language] = {
+    vacancy_sj_language_counts[developer_language] = {
+            "vacancies_found": vacancies_found_sj,
+            "vacancies_processed": len(salary_sj_vacancies),
+            "average_salary": average_salary
+        }
+
+    vacancy_hh_language_counts[developer_language] = {
             "vacancies_found": vacancy_found,
             "vacancies_processed": len(salary_hh_vacancies),
             "average_salary": average_salary
