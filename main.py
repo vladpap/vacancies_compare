@@ -114,14 +114,14 @@ def main():
         while True:
             vacancies = get_page_hh_vacancies(hh_page, developer_language)
 
-            vacancy_found = vacancies["found"]
-            vacancy_pages = vacancies["pages"]
+            vacancies_found_hh = vacancies["found"]
+            vacancies_pages_hh = vacancies["pages"]
 
             for vacancy in vacancies["items"]:
                 if (vacancy["salary"]) and (vacancy["salary"]["currency"] == "RUR"):
                     salary_hh_vacancies.append(predict_rub_salary_hh(vacancy))
             hh_page += 1
-            if hh_page > vacancy_pages:
+            if hh_page > vacancies_pages_hh:
                 break
 
         if not salary_hh_vacancies:
@@ -136,7 +136,7 @@ def main():
         }
 
     vacancy_hh_language_counts[developer_language] = {
-            "vacancies_found": vacancy_found,
+            "vacancies_found": vacancies_found_hh,
             "vacancies_processed": len(salary_hh_vacancies),
             "average_salary": average_salary
         }
